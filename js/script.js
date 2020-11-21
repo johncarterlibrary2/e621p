@@ -26,6 +26,9 @@ var e621pLimit = 10;
 var e621pPageNumber = 1;
 var e621pRating = '';
 
+var e621pDescending = true;
+var e621pAfterId = 0;
+
 // These variables are used to decide if there is more data from the API.
 var e621pFailedImageNumber = 0;
 var e621pSuccessImageNumber = 0;
@@ -291,10 +294,16 @@ $(function () {
         }
     };
 
-    nsfwCookie = "nsfwCookie";
+    var nsfwCookie = "nsfwCookie";
     var updateNsfw = function () {
         nsfw = $("#nsfw").is(':checked');
         setCookie(nsfwCookie, nsfw, cookieDays);
+    };
+
+    var orderCookie = "orderCookie";
+    var updateOrder = function () {
+        e621pDescending = $("#descending").is(':checked');
+        setCookie(orderCookie, descending, cookieDays);
     };
 
     var initState = function () {
@@ -306,6 +315,16 @@ $(function () {
             $("#nsfw").prop("checked", nsfw);
         }
         $('#nsfw').change(updateNsfw);
+
+        var orderByCookie = getCookie(nsfwCookie);
+        if (orderByCookie == undefined) {
+            e621pDescending = true;
+        } else {
+            e621pDescending = (orderByCookie === "true");
+            $("#descending").prop("checked", e621pDescending);
+        }
+        $('#descending').change(updateOrder);
+
 
         var autoByCookie = getCookie(shouldAutoNextSlideCookie);
         if (autoByCookie == undefined) {
@@ -744,7 +763,7 @@ $(function () {
             //rating = rating+"+rating:q";
         }
 
-        var jsonUrl = "https://e621.net/post/index.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit+"&page="+e621pPageNumber;
+        var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit+`&page=${e621pDescending ? "b": "a"}`+e621pAfterId;
         //console.log(jsonUrl);
         //log(jsonUrl);
         var failedAjax = function (data) {
@@ -759,20 +778,41 @@ $(function () {
 
             returnJson = data;
 
+            console.log(data)
+
             if (returnJson.length === 0) {
                 alert("No data from this url :(");
                 return;
             }
 
-            $.each(returnJson, function (i, item) {
-              if(item.rating == "e" | item.rating == "q"){
-                isOver18 = true;
-              }else{
-                isOver18 = false;
-              }
+            $.each(returnJson.posts, function (i, item) {
+                console.log(i, item)
+                if(item.rating == "e" | item.rating == "q"){
+                    isOver18 = true;
+                }else{
+                    isOver18 = false;
+                }
+
+                //Prime AfterID
+                if(e621pAfterId === 0) e621pAfterId = item.id
+
+                if(e621pDescending){
+                    if(item.id < e621pAfterId){
+                        e621pAfterId = item.id
+                    }
+                }else{
+                    if(item.id > e621pAfterId){
+                        e621pAfterId = item.id
+                    }
+                }
+                if(item.file.url == null){
+                    //Item has been deleted, continue.
+                    return
+                }
+                
                 addImageSlide({
-                    url: item.file_url,
-                    title: item.author,
+                    url: item.file.url,
+                    title: item.tags.artist,
                     over18: isOver18,
                     subreddit: "",
                     commentsLink: "https://e621.net/post/show/" + item.id
@@ -805,7 +845,7 @@ $(function () {
                 // console.log(e621pFailedImageNumber);
                 // console.log(e621pSuccessImageNumber);
                 // console.log(e621pLimit);
-                alert("No more data from this URL :(")
+                //alert("No more data from this URL :(")
                 return;
             }
 
@@ -825,7 +865,7 @@ $(function () {
         // is the current solution sadly.
         $.ajax({
             url: jsonUrl,
-            dataType: 'jsonp',
+            dataType: 'json',
             success: handleData,
             error: failedAjax,
             404: failedAjax,
