@@ -600,7 +600,7 @@ $(function () {
         }
         if(photo.isVideo & photo.url.indexOf('gfycat.com') >= 0 | (photo.url.substr(photo.url.lastIndexOf('.')+1)) == "webm"){
           //console.log("correct");
-          divNode.html('<video autoplay class="webm" width="100%" height="100%" onended="slideNext()" controls> <source src="'+photo.url+'"type="video/webm"></video>');
+          divNode.html('<video autoplay muted class="webm" width="100%" height="100%" onended="slideNext()" controls> <source src="'+photo.url+'"type="video/webm"></video>');
         }
 
         //imgNode.appendTo(divNode);
