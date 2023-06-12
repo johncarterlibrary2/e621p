@@ -770,7 +770,12 @@ $(function () {
         }
 
         var e621pageString = '&page='+currentPage;
-		currentPage = currentPage + 1
+        currentPage = currentPage + 1;
+	
+	if(!e621pTags){
+	    e621pTags='fav:furrylogin3%20order:random';
+	}
+	
         var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
         console.log(jsonUrl);
         //log(jsonUrl);
