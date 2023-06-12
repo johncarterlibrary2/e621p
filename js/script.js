@@ -150,9 +150,10 @@ $(function () {
         startAnimation(activeIndex - 1);
     }
 
-    var currentSlideIsVideo = function() {
+    function currentSlideIsVideo() {
         var test_photo = ep.photos[activeIndex];
-	return(test_photo.url.substr(test_photo.url.lastIndexOf('.')+1) == "mp4");
+	var isMp4 = test_photo.url.includes(".mp4");
+	return isMp4;
     }
 
     var autoNextSlide = function () {
