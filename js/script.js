@@ -150,9 +150,13 @@ $(function () {
         startAnimation(activeIndex - 1);
     }
 
+	var currentSlideIsVideo = function() {
+		var test_phoro = ep.photos[activeIndex];
+		return(test_phoro.url.substr(test_phoro.url.lastIndexOf('.')+1)) == "mp4");
+	}
 
     var autoNextSlide = function () {
-        if (shouldAutoNextSlide) {
+        if (shouldAutoNextSlide && !currentSlideIsVideo()) {
             // startAnimation takes care of the setTimeout
             nextSlide();
         }
