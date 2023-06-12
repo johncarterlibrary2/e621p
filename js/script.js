@@ -150,10 +150,10 @@ $(function () {
         startAnimation(activeIndex - 1);
     }
 
-	var currentSlideIsVideo = function() {
-		var test_phoro = ep.photos[activeIndex];
-		return(test_phoro.url.substr(test_phoro.url.lastIndexOf('.')+1) == "mp4");
-	}
+    var currentSlideIsVideo = function() {
+        var test_photo = ep.photos[activeIndex];
+	return(test_photo.url.substr(test_photo.url.lastIndexOf('.')+1) == "mp4");
+    }
 
     var autoNextSlide = function () {
         if (shouldAutoNextSlide && !currentSlideIsVideo()) {
