@@ -152,7 +152,7 @@ $(function () {
 
 	var currentSlideIsVideo = function() {
 		var test_phoro = ep.photos[activeIndex];
-		return(test_phoro.url.substr(test_phoro.url.lastIndexOf('.')+1)) == "mp4");
+		return(test_phoro.url.substr(test_phoro.url.lastIndexOf('.')+1) == "mp4");
 	}
 
     var autoNextSlide = function () {
@@ -982,7 +982,7 @@ $(function () {
         // }
         $('#subredditUrl').html("<a href=\' https://www.e621.net \'> E621.net</a>");
 
-        document.title = "redditP - " + e621pTags;
+        document.title = "e621 - " + e621pTags;
     };
 
 
