@@ -763,7 +763,12 @@ $(function () {
             //rating = rating+"+rating:q";
         }
 
-        var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit;
+	var e621pageString = '&page=a'+e621pAfterId;
+	if(e621pTags.includes('order:random')){
+	    e621pageString = '';
+	}
+
+        var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
         //console.log(jsonUrl);
         //log(jsonUrl);
         var failedAjax = function (data) {
