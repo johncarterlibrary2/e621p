@@ -380,7 +380,7 @@ $(function () {
         }
         */
         pic.isVideo = false;
-        if (pic.url.indexOf('gfycat.com') >= 0 | (pic.url.substr(pic.url.lastIndexOf('.')+1)) == "webm"){
+        if (pic.url.indexOf('gfycat.com') >= 0 | (pic.url.substr(pic.url.lastIndexOf('.')+1)) == "mp4"){
             pic.isVideo = true;
             e621pSuccessImageNumber++;
         } else if (isImageExtension(pic.url)) {
@@ -598,9 +598,9 @@ $(function () {
                 gfyid = gfyid.substr(0, gfyid.indexOf('#'));
             divNode.html('<img class="gfyitem" data-id="'+gfyid+'" data-controls="false"/>');
         }
-        if(photo.isVideo & photo.url.indexOf('gfycat.com') >= 0 | (photo.url.substr(photo.url.lastIndexOf('.')+1)) == "webm"){
+        if(photo.isVideo & photo.url.indexOf('gfycat.com') >= 0 | (photo.url.substr(photo.url.lastIndexOf('.')+1)) == "mp4"){
           //console.log("correct");
-          divNode.html('<video autoplay muted class="webm" width="100%" height="100%" onended="slideNext()" controls> <source src="'+photo.url+'"type="video/webm"></video>');
+          divNode.html('<video autoplay muted class="mp4" width="100%" height="100%" onended="slideNext()" controls> <source src="'+photo.url+'"type="video/mp4"></video>');
         }
 
         //imgNode.appendTo(divNode);
@@ -692,7 +692,7 @@ $(function () {
 
         return '';
     };
-    var goodExtensions = ['.jpg', '.jpeg', '.gif', '.bmp', '.png','.webm'];
+    var goodExtensions = ['.jpg', '.jpeg', '.gif', '.bmp', '.png','.webm','.mp4'];
     var isImageExtension = function (url) {
         var dotLocation = url.lastIndexOf('.');
         if (dotLocation < 0) {
@@ -808,7 +808,9 @@ $(function () {
                 if(item.file.url == null){
                     //Item has been deleted, continue.
                     return
-                }
+                }else{
+					item.file.url = item.file.url.replace(".webm", ".mp4")
+				}
                 
                 addImageSlide({
                     url: item.file.url,
