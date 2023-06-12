@@ -28,6 +28,7 @@ var e621pRating = '';
 
 var e621pDescending = true;
 var e621pAfterId = 0;
+var currentPage = 1;
 
 // These variables are used to decide if there is more data from the API.
 var e621pFailedImageNumber = 0;
@@ -763,13 +764,10 @@ $(function () {
             //rating = rating+"+rating:q";
         }
 
-	var e621pageString = '&page=a'+e621pAfterId;
-	if(e621pTags.includes('order:random')){
-	    e621pageString = '';
-	}
-
+        var e621pageString = '&page='+currentPage;
+		currentPage = currentPage + 1
         var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
-        //console.log(jsonUrl);
+        console.log(jsonUrl);
         //log(jsonUrl);
         var failedAjax = function (data) {
             alert("Failed ajax, maybe a bad url? Sorry about that :(");
