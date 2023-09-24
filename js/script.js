@@ -159,7 +159,7 @@ $(function () {
 
     var autoNextSlide = function () {
         if (shouldAutoNextSlide) {
-			if(currentSlideIsVideo) {
+			if(currentSlideIsVideo()) {
 				videoReadyToEnd = true;
 			}else{
 				// startAnimation takes care of the setTimeout
