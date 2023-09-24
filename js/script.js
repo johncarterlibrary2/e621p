@@ -29,6 +29,7 @@ var e621pRating = '';
 var e621pDescending = true;
 var e621pAfterId = 0;
 var currentPage = 1;
+var videoReadyToEnd = false;
 
 // These variables are used to decide if there is more data from the API.
 var e621pFailedImageNumber = 0;
@@ -157,9 +158,13 @@ $(function () {
     }
 
     var autoNextSlide = function () {
-        if (shouldAutoNextSlide && !currentSlideIsVideo()) {
-            // startAnimation takes care of the setTimeout
-            nextSlide();
+        if (shouldAutoNextSlide) {
+			if(currentSlideIsVideo) {
+				videoReadyToEnd = true;
+			}else{
+				// startAnimation takes care of the setTimeout
+				nextSlide();
+			}
         }
     };
 
@@ -531,6 +536,7 @@ $(function () {
     // Variable to store if the animation is playing or not
     var isAnimating = false;
     var startAnimation = function (imageIndex) {
+		videoReadyToEnd = false;
         resetNextSlideTimer();
 
         // If the same number has been chosen, or the index is outside the
@@ -606,7 +612,8 @@ $(function () {
         }
         if(photo.isVideo & photo.url.indexOf('gfycat.com') >= 0 | (photo.url.substr(photo.url.lastIndexOf('.')+1)) == "mp4"){
           //console.log("correct");
-          divNode.html('<video autoplay playsinline class="mp4" width="100%" height="100%" onended="slideNext()" controls> <source src="'+photo.url+'"type="video/mp4"></video>');
+		  videoReadyToEnd = false;
+          divNode.html('<video autoplay playsinline class="mp4" width="100%" height="100%" loop="true" onended="slideNext()" controls> <source src="'+photo.url+'"type="video/mp4"></video>');
         }
 
         //imgNode.appendTo(divNode);
@@ -639,8 +646,9 @@ $(function () {
                var v = vid[0];
                v[0].onended = function (e) {
                  if (shouldAutoNextSlide)
-                     nextSlide();
-                   };
+					videoHasLooped = true;
+                    nextSlide();
+                 };
                });
         }
 
@@ -822,8 +830,8 @@ $(function () {
                     //Item has been deleted, continue.
                     return
                 }else{
-					item.file.url = item.file.url.replace(".webm", ".mp4")
-				}
+			item.file.url = item.file.url.replace(".webm", ".mp4")
+		}
                 
                 addImageSlide({
                     url: item.file.url,
@@ -1023,11 +1031,14 @@ $(function () {
                     }
                 }
             }
-            if (isLastImage(activeIndex) && !loadingNextImages) {
-                // the only reason we got here and there aren't more pictures yet
-                // is because there are no more images to load, start over
-                return startAnimation(0);
-            }
-            startAnimation(activeIndex + 1);
+			if(!currentSlideIsVideo || videoReadyToEnd)
+			{
+				if (isLastImage(activeIndex) && !loadingNextImages) {
+					// the only reason we got here and there aren't more pictures yet
+					// is because there are no more images to load, start over
+					return startAnimation(0);
+				}
+				startAnimation(activeIndex + 1);
+			}
         }
 });
