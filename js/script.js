@@ -21,6 +21,7 @@ var timeToNextSlide = 6 * 1000;
 var cookieDays = 300;
 
 // These vars are used for AJAX Url.
+var site = 'e621.net';
 var e621pTags = '';
 var e621pLimit = 10;
 var e621pPageNumber = 1;
@@ -73,7 +74,9 @@ $(function () {
     $("#navboxTitle").text("Loading E621 Slideshow");
 
     //Get Query Variables From URL.
-
+    if(getQueryVariable("site") != ''){
+	    site = getQueryVariable("site")+".net";
+    }
     if(getQueryVariable("tags")== '' /*|| (typeof getQueryVariable("tags")) != "string"*/){
 			e621pTags = '';
       console.log('You can search specific tags by specifying ?tags= in the URL e.g. /?tags=wolf&page=1&limit=10');
@@ -784,7 +787,7 @@ $(function () {
 	    e621pTags='fav:furrylogin3%20order:random';
 	}
 	
-        var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
+        var jsonUrl = "https://"+site+"/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
         console.log(jsonUrl);
         //log(jsonUrl);
         var failedAjax = function (data) {
@@ -838,7 +841,7 @@ $(function () {
                     title: item.tags.artist,
                     over18: isOver18,
                     subreddit: "",
-                    commentsLink: "https://e621.net/post/show/" + item.id
+                    commentsLink: "https://"+site+"e621.net/post/show/" + item.id
                 });
             });
 
@@ -994,7 +997,7 @@ $(function () {
         // if(displayedSubredditName.length > capsize) {
         //     displayedSubredditName = displayedSubredditName.substr(0,capsize) + "&hellip;";
         // }
-        $('#subredditUrl').html("<a href=\' https://www.e621.net \'> E621.net</a>");
+        $('#subredditUrl').html("<a href=\' https://www."+site+" \'> E621.net</a>");
 
         document.title = "e621 - " + e621pTags;
     };
