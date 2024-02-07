@@ -784,7 +784,11 @@ $(function () {
         currentPage = currentPage + 1;
 	
 	if(!e621pTags){
-	    e621pTags='fav:furrylogin3%20order:random';
+		defaultUser='furrylogin3'
+		if(site=='e6ai.net'){
+			defaultUser='furryloginai';
+		}
+	    e621pTags='fav:'+defaultUser+'%20order:random';
 	}
 	
         var jsonUrl = "https://"+site+"/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
