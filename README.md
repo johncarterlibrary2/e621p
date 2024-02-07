@@ -3,7 +3,7 @@ e621p
 
 A full screen E621 presentation or slide show.
 
-http://johncarterlibrary.github.io/e621p/
+http://johncarterlibrary2.github.io/e621p/
 
 Hotkeys
 -------
