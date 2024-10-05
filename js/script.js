@@ -783,13 +783,17 @@ $(function () {
         var e621pageString = '&page='+currentPage;
         currentPage = currentPage + 1;
 	
-	if(!e621pTags){
-		defaultUser='furrylogin3'
-		if(site=='e6ai.net'){
-			defaultUser='furryloginai';
+		if(!e621pTags){
+			defaultUser='furrylogin3'
+			if(site=='e6ai.net'){
+				defaultUser='furryloginai';
+			}
+			e621pTags='fav:'+defaultUser;
 		}
-	    e621pTags='fav:'+defaultUser+'%20order:random';
-	}
+		
+		if(!e621pTags.includes("order")){
+			e621pTags=e621pTags+'%20order:random';
+		}
 	
         var jsonUrl = "https://"+site+"/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
         console.log(jsonUrl);
