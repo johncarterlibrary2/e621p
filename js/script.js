@@ -713,7 +713,7 @@ $(function () {
         var e621pageString = '&page='+currentPage;
         currentPage = currentPage + 1;
 	
-		if(!e621pTags){
+		if(!e621pTags.includes("fav:"){
 			defaultUser='furrylogin3'
 			if(site=='e6ai.net'){
 				defaultUser='furryloginai';
@@ -721,7 +721,7 @@ $(function () {
 			e621pTags='fav:'+defaultUser;
 		}
 		
-		if(!e621pTags.includes("order")){
+		if(!e621pTags.includes("order:")){
 			e621pTags=e621pTags+'%20order:random';
 		}
 	
