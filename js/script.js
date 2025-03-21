@@ -343,14 +343,14 @@ $(function () {
     };
 
     var addNumberButton = function (numberButton) {
-        var navboxUls = $(".navbox ul");
-        var thisNavboxUl = navboxUls[navboxUls.length - 1];
-
-        var newListItem = $("<li />").appendTo(thisNavboxUl);
-        numberButton.appendTo(newListItem);
-
-        // so li's have a space between them and can word-wrap in the box
-        navboxUls.append(document.createTextNode(' '));
+//        var navboxUls = $(".navbox ul");
+//        var thisNavboxUl = navboxUls[navboxUls.length - 1];
+//
+//        var newListItem = $("<li />").appendTo(thisNavboxUl);
+//        numberButton.appendTo(newListItem);
+//
+//        // so li's have a space between them and can word-wrap in the box
+//        navboxUls.append(document.createTextNode(' '));
     };
 
     var addImageSlide = function (pic) {
