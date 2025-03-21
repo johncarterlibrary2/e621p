@@ -24,7 +24,6 @@ var cookieDays = 300;
 var e621pTags = '';
 var e621pLimit = 10;
 var e621pPageNumber = 1;
-var e621pRating = '';
 
 var e621pDescending = true;
 var e621pAfterId = 0;
@@ -88,51 +87,18 @@ $(function () {
 		e621pPageNumber = getQueryVariable("page");
 	}
 
-	if(getQueryVariable("limit")== 0")){
+	if(getQueryVariable("limit")== 0)){
 		e621pLimit = 5;
 		console.log('You can specify images per load cycle by specifying ?limit= in the URL e.g. /?tags=wolf&page=1&limit=10');
 	}else{
 		e621pLimit = getQueryVariable("limit");
 	}
 
-	fadeoutWhenIdle = true;
-	var setupFadeoutOnIdle = function () {
-		$('.fadeOnIdle').fadeTo('fast', 0);
-		var navboxVisible = false;
-		var fadeoutTimer = null;
-		var fadeoutFunction = function () {
-			navboxVisible = false;
-			if (fadeoutWhenIdle) {
-				$('.fadeOnIdle').fadeTo('slow', 0);
-			}
-		};
-		$("body").mousemove(function () {
-			if (navboxVisible) {
-				clearTimeout(fadeoutTimer);
-				fadeoutTimer = setTimeout(fadeoutFunction, 2000);
-				return;
-			}
-			navboxVisible = true;
-			$('.fadeOnIdle').fadeTo('fast', 1);
-			fadeoutTimer = setTimeout(fadeoutFunction, 2000);
-		});
-	};
-	// this fadeout was really inconvenient on mobile phones
-	// and instead the minimize buttons should be used.
-	//setupFadeoutOnIdle();
-
 	var nextSlideTimeoutId = null;
 
 	var loadingNextImages = false;
 
 	function nextSlide() {
-		if(!nsfw) {
-			for(var i = activeIndex + 1; i < ep.photos.length; i++) {
-				if (!ep.photos[i].over18) {
-					return startAnimation(i);
-				}
-			}
-		}
 		if (isLastImage(activeIndex) && !loadingNextImages) {
 			// the only reason we got here and there aren't more pictures yet
 			// is because there are no more images to load, start over
@@ -140,14 +106,8 @@ $(function () {
 		}
 		startAnimation(activeIndex + 1);
 	}
+	
 	function prevSlide() {
-		if(!nsfw) {
-			for(var i = activeIndex - 1; i > 0; i--) {
-				if (!ep.photos[i].over18) {
-					return startAnimation(i);
-				}
-			}
-		}
 		startAnimation(activeIndex - 1);
 	}
 
@@ -305,12 +265,6 @@ $(function () {
 		}
 	};
 
-	var nsfwCookie = "nsfwCookie";
-	var updateNsfw = function () {
-		nsfw = $("#nsfw").is(':checked');
-		setCookie(nsfwCookie, nsfw, cookieDays);
-	};
-
 	var orderCookie = "orderCookie";
 	var updateOrder = function () {
 		e621pDescending = $("#descending").is(':checked');
@@ -318,16 +272,7 @@ $(function () {
 	};
 
 	var initState = function () {
-		var nsfwByCookie = getCookie(nsfwCookie);
-		if (nsfwByCookie == undefined) {
-			nsfw = true;
-		} else {
-			nsfw = (nsfwByCookie === "true");
-			$("#nsfw").prop("checked", nsfw);
-		}
-		$('#nsfw').change(updateNsfw);
-
-		var orderByCookie = getCookie(nsfwCookie);
+		var orderByCookie = getCookie(orderCookie);
 		if (orderByCookie == undefined) {
 			e621pDescending = true;
 		} else {
@@ -514,20 +459,10 @@ $(function () {
 	};
 
 	var isLastImage = function(imageIndex) {
-		if(nsfw) {
-			if(imageIndex == ep.photos.length - 1) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			// look for remaining sfw images
-			for(var i = imageIndex + 1; i < ep.photos.length; i++) {
-				if(!ep.photos[i].over18) {
-					return false;
-				}
-			}
+		if(imageIndex == ep.photos.length - 1) {
 			return true;
+		} else {
+			return false;
 		}
 	};
 	//
@@ -741,17 +676,6 @@ $(function () {
 		e621pFailedImageNumber = 0;
 		e621pSuccessImageNumber = 0;
 
-		//Checks what the NSFW tag is and sets the image rating
-		if(nsfw){
-			e621pRating = "rating:e";
-			//Leaving out questionable from NSFW -- If Wanting questionable in NSFW uncomment line below
-			//rating = rating+"+rating:q";
-		}else{
-			e621pRating = "rating:s";
-			//Leading out questinable from SFW -- If Wanting questionable in SFW uncomment line below
-			//rating = rating+"+rating:q";
-		}
-
 		var e621pageString = '&page='+currentPage;
 		currentPage = currentPage + 1;
 	
@@ -759,7 +683,7 @@ $(function () {
 		e621pTags='fav:furrylogin3%20order:random';
 	}
 	
-		var jsonUrl = "https://e621.net/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
+		var jsonUrl = "https://e621.net/posts.json?tags="+e621pTags +"&limit="+ e621pLimit + e621pageString;
 		console.log(jsonUrl);
 		//log(jsonUrl);
 		var failedAjax = function (data) {
@@ -912,13 +836,6 @@ $(function () {
 		getRedditImages();
 
 		window.slideNext = function(){
-			if(!nsfw) {
-				for(var i = activeIndex + 1; i < ep.photos.length; i++) {
-					if (!ep.photos[i].over18) {
-						return startAnimation(i);
-					}
-				}
-			}
 			if(!currentSlideIsVideo || videoReadyToEnd)
 			{
 				if (isLastImage(activeIndex) && !loadingNextImages) {
