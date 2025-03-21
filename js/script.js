@@ -87,7 +87,7 @@ $(function () {
 		e621pPageNumber = getQueryVariable("page");
 	}
 
-	if(getQueryVariable("limit")== 0){
+	if(getQueryVariable("limit")== 0)){
 		e621pLimit = 5;
 		console.log('You can specify images per load cycle by specifying ?limit= in the URL e.g. /?tags=wolf&page=1&limit=10');
 	}else{
@@ -113,8 +113,8 @@ $(function () {
 
 	function currentSlideIsVideo() {
 		var test_photo = ep.photos[activeIndex];
-		var isMp4 = test_photo.url.includes(".mp4");
-		return isMp4;
+	var isMp4 = test_photo.url.includes(".mp4");
+	return isMp4;
 	}
 
 	var autoNextSlide = function () {
@@ -129,13 +129,13 @@ $(function () {
 	};
 
 	function getQueryVariable(variable) {
-		var query = window.location.search.substring(1);
-		var vars = query.split("&");
-		for (var i=0;i<vars.length;i++) {
-			var pair = vars[i].split("=");
-			if(pair[0] == variable){return pair[1];}
-		}
-		return(false);
+	 var query = window.location.search.substring(1);
+	 var vars = query.split("&");
+	 for (var i=0;i<vars.length;i++) {
+		   var pair = vars[i].split("=");
+		   if(pair[0] == variable){return pair[1];}
+	 }
+	return(false);
 	}
 
 	function open_in_background(selector){
@@ -465,7 +465,6 @@ $(function () {
 			return false;
 		}
 	};
-	
 	//
 	// Starts the animation, based on the image index
 	//
@@ -680,9 +679,9 @@ $(function () {
 		var e621pageString = '&page='+currentPage;
 		currentPage = currentPage + 1;
 	
-		if(!e621pTags){
-			e621pTags='fav:furrylogin3%20order:random';
-		}
+	if(!e621pTags){
+		e621pTags='fav:furrylogin3%20order:random';
+	}
 	
 		var jsonUrl = "https://e621.net/posts.json?tags="+e621pTags +"&limit="+ e621pLimit + e621pageString;
 		console.log(jsonUrl);
