@@ -578,7 +578,6 @@ $(function () {
         var subreddit = '/r/' + photo.subreddit;
 
         $('#navboxTitle').html(photo.title);
-        //$('#navboxSubreddit').attr('href', ep.redditBaseUrl + subreddit).html(subreddit);
         $('#navboxLink').attr('href', photo.url).attr('title', photo.title);
         $('#navboxCommentsLink').attr('href', photo.commentsLink).attr('title', "Comments on e621");
 
@@ -907,66 +906,6 @@ $(function () {
         });
     };
 
-    // var getImgurAlbum = function (url) {
-    //     var albumID = url.match(/.*\/(.+?$)/)[1];
-    //     var jsonUrl = 'https://api.imgur.com/3/album/' + albumID;
-    //     //log(jsonUrl);
-    //     var failedAjax = function (data) {
-    //         alert("Failed ajax, maybe a bad url? Sorry about that :(");
-    //         failCleanup();
-    //     };
-    //     var handleData = function (data) {
-    //
-    //         //console.log(data);
-    //
-    //         if (data.data.images.length === 0) {
-    //             alert("No data from this url :(");
-    //             return;
-    //         }
-    //
-    //         $.each(data.data.images, function (i, item) {
-    //             addImageSlide({
-    //                 url: item.link,
-    //                 title: item.title,
-    //                 over18: item.nsfw,
-    //                 commentsLink: ""
-    //             });
-    //         });
-    //
-    //         verifyNsfwMakesSense();
-    //
-    //         if (!ep.foundOneImage) {
-    //             log(jsonUrl);
-    //             alert("Sorry, no displayable images found in that url :(");
-    //         }
-    //
-    //         // show the first image
-    //         if (activeIndex == -1) {
-    //             startAnimation(0);
-    //         }
-    //
-    //         //log("No more pages to load from this subreddit, reloading the start");
-    //
-    //         // Show the user we're starting from the top
-    //         //var numberButton = $("<span />").addClass("numberButton").text("-");
-    //         //addNumberButton(numberButton);
-    //
-    //         loadingNextImages = false;
-    //     };
-    //
-    //     $.ajax({
-    //         url: jsonUrl,
-    //         dataType: 'json',
-    //         success: handleData,
-    //         error: failedAjax,
-    //         404: failedAjax,
-    //         timeout: 5000,
-    //         beforeSend : function(xhr) {
-    //             xhr.setRequestHeader('Authorization',
-    //                 'Client-ID ' + 'f2edd1ef8e66eaf');}
-    //     });
-    // };
-
     var setupUrls = function() {
         ep.urlData = ep.getRestOfUrl();
         //log(ep.urlData)
@@ -979,49 +918,12 @@ $(function () {
             getVarsQuestionMark = "";
         }
 
-        // // Remove .compact as it interferes with .json (we got "/r/all/.compact.json" which doesn't work).
-        // ep.subredditUrl = ep.subredditUrl.replace(/.compact/, "");
-        // // Consolidate double slashes to avoid r/all/.compact/ -> r/all//
-        // ep.subredditUrl = ep.subredditUrl.replace(/\/{2,}/, "/");
-        //
-        // var subredditName;
-        // if (ep.subredditUrl === "") {
-        //     ep.subredditUrl = "/";
-        //     subredditName = "reddit.com" + getVarsQuestionMark;
-        //     //var options = ["/r/aww/", "/r/earthporn/", "/r/foodporn", "/r/pics"];
-        //     //ep.subredditUrl = options[Math.floor(Math.random() * options.length)];
-        // } else {
-        //     subredditName = ep.subredditUrl + getVarsQuestionMark;
-        // }
-        //
-        //
-        // var visitSubredditUrl = ep.redditBaseUrl + ep.subredditUrl + getVarsQuestionMark;
-        //
-        // // truncate and display subreddit name in the control box
-        // var displayedSubredditName = subredditName;
-        // // empirically tested capsize, TODO: make css rules to verify this is enough.
-        // // it would make the "nsfw" checkbox be on its own line :(
-        // var capsize = 19;
-        // if(displayedSubredditName.length > capsize) {
-        //     displayedSubredditName = displayedSubredditName.substr(0,capsize) + "&hellip;";
-        // }
         $('#subredditUrl').html("<a href=\' https://www."+site+" \'> E621.net</a>");
 
         document.title = "e621 - " + e621pTags;
     };
 
-
-
-
-    ep.redditBaseUrl = "http://www.reddit.com";
-    if (location.protocol === 'https:') {
-        // page is secure
-        ep.redditBaseUrl = "https://www.reddit.com";
-        // TODO: try "//" instead of specifying the protocol
-    }
-
     var getVars;
-    // var after = "";
 
     initState();
     setupUrls();
@@ -1029,27 +931,24 @@ $(function () {
     // if ever found even 1 image, don't show the error
     ep.foundOneImage = false;
 
-    // if(ep.subredditUrl.indexOf('/imgur') == 0)
-    //     getImgurAlbum(ep.subredditUrl);
-    // else
-        getRedditImages();
+	getRedditImages();
 
-        window.slideNext = function(){
-            if(!nsfw) {
-                for(var i = activeIndex + 1; i < ep.photos.length; i++) {
-                    if (!ep.photos[i].over18) {
-                        return startAnimation(i);
-                    }
-                }
-            }
-			if(!currentSlideIsVideo || videoReadyToEnd)
-			{
-				if (isLastImage(activeIndex) && !loadingNextImages) {
-					// the only reason we got here and there aren't more pictures yet
-					// is because there are no more images to load, start over
-					return startAnimation(0);
+	window.slideNext = function(){
+		if(!nsfw) {
+			for(var i = activeIndex + 1; i < ep.photos.length; i++) {
+				if (!ep.photos[i].over18) {
+					return startAnimation(i);
 				}
-				startAnimation(activeIndex + 1);
 			}
-        }
+		}
+		if(!currentSlideIsVideo || videoReadyToEnd)
+		{
+			if (isLastImage(activeIndex) && !loadingNextImages) {
+				// the only reason we got here and there aren't more pictures yet
+				// is because there are no more images to load, start over
+				return startAnimation(0);
+			}
+			startAnimation(activeIndex + 1);
+		}
+	}
 });
