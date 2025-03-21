@@ -718,7 +718,7 @@ $(function () {
 			if(site=='e6ai.net'){
 				defaultUser='furryloginai';
 			}
-			e621pTags='fav:'+defaultUser;
+			e621pTags=e621pTags+'%20fav:'+defaultUser;
 		}
 		
 		if(!e621pTags.includes("order:")){
