@@ -25,7 +25,6 @@ var site = 'e621.net';
 var e621pTags = '';
 var e621pLimit = 10;
 var e621pPageNumber = 1;
-var e621pRating = '';
 
 var e621pDescending = true;
 var e621pAfterId = 0;
@@ -129,13 +128,6 @@ $(function () {
     var loadingNextImages = false;
 
     function nextSlide() {
-        if(!nsfw) {
-            for(var i = activeIndex + 1; i < ep.photos.length; i++) {
-                if (!ep.photos[i].over18) {
-                    return startAnimation(i);
-                }
-            }
-        }
         if (isLastImage(activeIndex) && !loadingNextImages) {
             // the only reason we got here and there aren't more pictures yet
             // is because there are no more images to load, start over
@@ -144,13 +136,6 @@ $(function () {
         startAnimation(activeIndex + 1);
     }
     function prevSlide() {
-        if(!nsfw) {
-            for(var i = activeIndex - 1; i > 0; i--) {
-                if (!ep.photos[i].over18) {
-                    return startAnimation(i);
-                }
-            }
-        }
         startAnimation(activeIndex - 1);
     }
 
@@ -308,12 +293,6 @@ $(function () {
         }
     };
 
-    var nsfwCookie = "nsfwCookie";
-    var updateNsfw = function () {
-        nsfw = $("#nsfw").is(':checked');
-        setCookie(nsfwCookie, nsfw, cookieDays);
-    };
-
     var orderCookie = "orderCookie";
     var updateOrder = function () {
         e621pDescending = $("#descending").is(':checked');
@@ -321,16 +300,7 @@ $(function () {
     };
 
     var initState = function () {
-        var nsfwByCookie = getCookie(nsfwCookie);
-        if (nsfwByCookie == undefined) {
-            nsfw = true;
-        } else {
-            nsfw = (nsfwByCookie === "true");
-            $("#nsfw").prop("checked", nsfw);
-        }
-        $('#nsfw').change(updateNsfw);
-
-        var orderByCookie = getCookie(nsfwCookie);
+        var orderByCookie = getCookie(orderCookie);
         if (orderByCookie == undefined) {
             e621pDescending = true;
         } else {
@@ -517,22 +487,13 @@ $(function () {
     };
 
     var isLastImage = function(imageIndex) {
-        if(nsfw) {
-            if(imageIndex == ep.photos.length - 1) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            // look for remaining sfw images
-            for(var i = imageIndex + 1; i < ep.photos.length; i++) {
-                if(!ep.photos[i].over18) {
-                    return false;
-                }
-            }
+        if(imageIndex == ep.photos.length - 1) {
             return true;
+        } else {
+            return false;
         }
     };
+	
     //
     // Starts the animation, based on the image index
     //
@@ -663,25 +624,6 @@ $(function () {
     };
 
 
-
-    var verifyNsfwMakesSense = function() {
-        // Cases when you forgot NSFW off but went to /r/nsfw
-        // can cause strange bugs, let's help the user when over 80% of the
-        // content is NSFW.
-        var nsfwImages = 0;
-        for(var i = 0; i < ep.photos.length; i++) {
-            if(ep.photos[i].over18) {
-                nsfwImages += 1;
-            }
-        }
-
-        if(0.8 < nsfwImages * 1.0 / ep.photos.length) {
-            nsfw = true;
-            $("#nsfw").prop("checked", nsfw);
-        }
-    };
-
-
     var tryConvertUrl = function (url) {
         if (url.indexOf('imgur.com') > 0 || url.indexOf('/gallery/') > 0) {
             // special cases with imgur
@@ -768,17 +710,6 @@ $(function () {
         e621pFailedImageNumber = 0;
         e621pSuccessImageNumber = 0;
 
-        //Checks what the NSFW tag is and sets the image rating
-        if(nsfw){
-            e621pRating = "rating:e";
-            //Leaving out questionable from NSFW -- If Wanting questionable in NSFW uncomment line below
-            //rating = rating+"+rating:q";
-        }else{
-            e621pRating = "rating:s";
-            //Leading out questinable from SFW -- If Wanting questionable in SFW uncomment line below
-            //rating = rating+"+rating:q";
-        }
-
         var e621pageString = '&page='+currentPage;
         currentPage = currentPage + 1;
 	
@@ -794,7 +725,7 @@ $(function () {
 			e621pTags=e621pTags+'%20order:random';
 		}
 	
-        var jsonUrl = "https://"+site+"/posts.json?tags="+e621pRating+"+"+e621pTags +"&limit="+ e621pLimit + e621pageString;
+        var jsonUrl = "https://"+site+"/posts.json?tags="+e621pTags +"&limit="+ e621pLimit + e621pageString;
         console.log(jsonUrl);
         //log(jsonUrl);
         var failedAjax = function (data) {
@@ -851,8 +782,6 @@ $(function () {
                     commentsLink: "https://"+site+"e621.net/post/show/" + item.id
                 });
             });
-
-            verifyNsfwMakesSense();
 
             if (!ep.foundOneImage) {
                 // Note: the jsonp url may seem malformed but jquery fixes it.
@@ -934,13 +863,6 @@ $(function () {
 	getRedditImages();
 
 	window.slideNext = function(){
-		if(!nsfw) {
-			for(var i = activeIndex + 1; i < ep.photos.length; i++) {
-				if (!ep.photos[i].over18) {
-					return startAnimation(i);
-				}
-			}
-		}
 		if(!currentSlideIsVideo || videoReadyToEnd)
 		{
 			if (isLastImage(activeIndex) && !loadingNextImages) {
