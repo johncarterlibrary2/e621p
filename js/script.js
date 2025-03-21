@@ -74,26 +74,26 @@ $(function () {
 
 	//Get Query Variables From URL.
 
-	if(getQueryVariable("tags")== '' /*|| (typeof getQueryVariable("tags")) != "string"*/){
-			e621pTags = '';
-	  console.log('You can search specific tags by specifying ?tags= in the URL e.g. /?tags=wolf&page=1&limit=10');
-		}else{
-			e621pTags = getQueryVariable("tags");
-		}
+	if(getQueryVariable("tags")== ''){
+		e621pTags = '';
+		console.log('You can search specific tags by specifying ?tags= in the URL e.g. /?tags=wolf&page=1&limit=10');
+	}else{
+		e621pTags = getQueryVariable("tags");
+	}
 
-		if(getQueryVariable("page")== 0 /*|| (typeof getQueryVariable("page")) != "number"*/){
-			e621pPageNumber = 1;
-	  console.log('You can select a specific page for results by specifying ?page= in the URL e.g. /?tags=wolf&page=1&limit=10');
-		}else{
-			e621pPageNumber = getQueryVariable("page");
-		}
+	if(getQueryVariable("page")== 0){
+		e621pPageNumber = 1;
+		console.log('You can select a specific page for results by specifying ?page= in the URL e.g. /?tags=wolf&page=1&limit=10');
+	}else{
+		e621pPageNumber = getQueryVariable("page");
+	}
 
-	if(getQueryVariable("limit")== 0 /*|| ((typeof getQueryVariable("limit")) != "number")*/){
-			e621pLimit = 5;
-	  console.log('You can specify images per load cycle by specifying ?limit= in the URL e.g. /?tags=wolf&page=1&limit=10');
-		}else{
-			e621pLimit = getQueryVariable("limit");
-		}
+	if(getQueryVariable("limit")== 0")){
+		e621pLimit = 5;
+		console.log('You can specify images per load cycle by specifying ?limit= in the URL e.g. /?tags=wolf&page=1&limit=10');
+	}else{
+		e621pLimit = getQueryVariable("limit");
+	}
 
 	fadeoutWhenIdle = true;
 	var setupFadeoutOnIdle = function () {
