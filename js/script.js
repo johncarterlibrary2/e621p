@@ -87,7 +87,7 @@ $(function () {
 		e621pPageNumber = getQueryVariable("page");
 	}
 
-	if(getQueryVariable("limit")== 0)){
+	if(getQueryVariable("limit")== 0){
 		e621pLimit = 5;
 		console.log('You can specify images per load cycle by specifying ?limit= in the URL e.g. /?tags=wolf&page=1&limit=10');
 	}else{
