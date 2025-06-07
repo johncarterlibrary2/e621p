@@ -579,7 +579,7 @@ $(function () {
                 gfyid = gfyid.substr(0, gfyid.indexOf('#'));
             divNode.html('<img class="gfyitem" data-id="'+gfyid+'" data-controls="false"/>');
         }
-        if(photo.isVideo & photo.url.indexOf('gfycat.com') >= 0 | (photo.url.substr(photo.url.lastIndexOf('.')+1)) == "mp4"){
+        if(photo.isVideo){
           //console.log("correct");
 		  videoReadyToEnd = false;
           divNode.html('<video autoplay playsinline width="100%" height="100%" loop="true" controls> <source src="'+photo.url+'"></video>');
