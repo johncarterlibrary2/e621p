@@ -386,8 +386,14 @@ $(function () {
         }
 
         ep.foundOneImage = true;
-
-        preLoadImages(pic.url);
+	    
+	if(pic.isVideo) {
+		var fixedUrl = pic.url.replace("data", "data/sample")
+		fixedUrl = fixedUrl.replace(".mp4", "_720p.mp4")
+		preLoadImages(fixedUrl)
+	}else{
+        	preLoadImages(pic.url);
+	}
         ep.photos.push(pic);
 
         var i = ep.photos.length - 1;
