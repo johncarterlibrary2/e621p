@@ -582,7 +582,7 @@ $(function () {
         if(photo.isVideo){
           //console.log("correct");
 		  videoReadyToEnd = false;
-          divNode.html('<video autoplay playsinline width="100%" height="100%" loop="true" controls> <source src="'+photo.url+'"></video>');
+          divNode.html('<video autoplay="true" playsinline width="100%" height="100%" loop="loop" controls="controls" src="'+photo.url+'"></video>');
         }
 
         //imgNode.appendTo(divNode);
