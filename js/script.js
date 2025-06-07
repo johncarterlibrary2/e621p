@@ -388,8 +388,9 @@ $(function () {
         ep.foundOneImage = true;
 	    
 	if(pic.isVideo) {
-		pic.url = pic.url.replace("data", "data/sample")
-		pic.url = pic.url.replace(".mp4", "_720p.mp4")
+		//pic.url = pic.url.replace("data", "data/sample")
+		//pic.url = pic.url.replace(".mp4", "_720p.mp4")
+		pic.url = pic.url.replace(".mp4", ".webm")
 	}
 
 	preLoadImages(pic.url);
