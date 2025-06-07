@@ -388,12 +388,11 @@ $(function () {
         ep.foundOneImage = true;
 	    
 	if(pic.isVideo) {
-		var fixedUrl = pic.url.replace("data", "data/sample")
-		fixedUrl = fixedUrl.replace(".mp4", "_720p.mp4")
-		preLoadImages(fixedUrl)
-	}else{
-        	preLoadImages(pic.url);
+		pic.url = pic.url.replace("data", "data/sample")
+		pic.url = pic.url.replace(".mp4", "_720p.mp4")
 	}
+
+	preLoadImages(pic.url);
         ep.photos.push(pic);
 
         var i = ep.photos.length - 1;
